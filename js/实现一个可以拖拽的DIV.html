@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #xxx {
+        width: 200px;
+        height: 200px;
+        background: #f50;
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="xxx">2</div>
+    <script>
+      var dragging = false
+      var position = null
+      div = document.getElementById('xxx')
+      div.addEventListener('mousedown', function (e) {
+        dragging = true
+        position = [e.clientX, e.clientY]
+      })
+
+      document.addEventListener('mousemove', function (e) {
+        if (dragging === false) return null
+        const x = e.clientX
+        const y = e.clientY
+        const deltaX = x - position[0]
+        const deltaY = y - position[1]
+        const left = parseInt(div.style.left || 0)
+        const top = parseInt(div.style.top || 0)
+        div.style.left = left + deltaX + 'px'
+        div.style.top = top + deltaY + 'px'
+        position = [x, y]
+      })
+      document.addEventListener('mouseup', function (e) {
+        dragging = false
+      })
+    </script>
+  </body>
+</html>
