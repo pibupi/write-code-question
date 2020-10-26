@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="./index2.js"></script>
+    <!-- <script>
+      let p = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          reject(1)
+        }, 100)
+      })
+      p.then(
+        (value) => {
+          console.log('onResolved', value)
+        },
+        (reason) => {
+          console.log('onRejected', reason)
+        }
+      )
+      p.then(
+        (value) => {
+          console.log('onResolved2', value)
+        },
+        (reason) => {
+          console.log('onRejected2', reason)
+        }
+      )
+    </script> -->
+    <!-- <script>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // resolve(1)
+          reject(2)
+        }, 100)
+      })
+        .then(
+          (value) => {
+            console.log('onResolved', value)
+          },
+          (reason) => {
+            console.log('onRejected', reason)
+          }
+        )
+        .then(
+          (value) => {
+            console.log('onResolved2', value)
+          },
+          (reason) => {
+            console.log('onRejected2', reason)
+          }
+        )
+    </script> -->
+    <!-- <script>
+      const p1 = Promise.resolve(1)
+      const p2 = Promise.resolve(Promise.resolve(3))
+      const p3 = Promise.resolve(Promise.reject(4))
+      p1.then((value) => console.log('p1', value))
+      p2.then((value) => console.log('p2', value))
+      p3.catch((reason) => console.log('p1', reason))
+    </script> -->
+    <script>
+      const p1 = Promise.resolve(1)
+      const p2 = Promise.resolve(Promise.resolve(3))
+      const p3 = Promise.resolve(Promise.reject(4))
+      const p4 = new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(5)
+        }, 1000)
+      })
+      const p5 = Promise.reject(6)
+      const pAll = Promise.all([p4, 7, p1, p2])
+      pAll.then(
+        (values) => {
+          console.log('all resolved', values)
+        },
+        (reason) => {
+          console.log('all rejected', reason)
+        }
+      )
+      // const pRace = Promise.race([p4, 7, p5, p1, p2])
+      // pRace.then(
+      //   (value) => {
+      //     console.log('race resolved', value)
+      //   },
+      //   (reason) => {
+      //     console.log('race rejected', reason)
+      //   }
+      // )
+    </script>
+  </body>
+</html>
