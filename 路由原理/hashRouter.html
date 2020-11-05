@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="myBtn">改变hash的值</button>
+    <script>
+      const myBtn = document.getElementById('myBtn')
+      // 监听onhashchange事件
+      window.onhashchange = (e) => {
+        console.log('老的url ', e.oldURL)
+        console.log('新的url ', e.newURL)
+        console.log('hash ', location.hash)
+      }
+      // 首次dom渲染渲染完毕读取到hash值
+      window.addEventListener('DOMContentLoaded', () => {
+        console.log(location.hash)
+      })
+      myBtn.addEventListener('click', () => {
+        location.href = '#/user'
+      })
+      // 而且浏览器的前进后退按钮也可以实现hash值的变化，并且不会刷新页面
+    </script>
+  </body>
+</html>

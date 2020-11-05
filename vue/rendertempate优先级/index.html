@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>el \template\ render 优先级</h1>
+      <p>{{message}}</p>
+    </div>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          message: 'Hello outerHTMML',
+        },
+        template: 'Hello template',
+        render(h) {
+          return h('div', {}, 'hello render')
+        },
+      })
+      // render > template > el
+      // 因为最终都会编译成render函数,生命周期图中很清晰明了
+    </script>
+  </body>
+</html>
