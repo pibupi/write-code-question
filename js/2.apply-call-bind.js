@@ -1,7 +1,7 @@
 // call、apply、bind原理
 
-function person(a, b, c, d) {
-  console.log(this.name, a, b, c, d)
+function person(a, b, c, d, e) {
+  console.log(this.name, a, b, c, d, e)
 }
 let obj = {
   name: 'zh',
@@ -14,9 +14,10 @@ Function.prototype.myCall = function (context) {
   context.fn = this
   const args = [...arguments].slice(1)
   let result = context.fn(...args)
+  delete context.fn
   return result
 }
-// person.myCall(obj, 1, 2, 3, 4)
+person.myCall(obj, 1, 2, 3, 4)
 
 Function.prototype.myApply = function (context) {
   if (typeof this !== 'function') {
@@ -30,9 +31,10 @@ Function.prototype.myApply = function (context) {
   } else {
     result = context.fn()
   }
+  delete context.fn
   return result
 }
-// person.myApply(obj, [1, 2, 3, 4])
+person.myApply(obj, [1, 2, 3, 4])
 
 Function.prototype.myBind = function (context) {
   if (typeof this !== 'function') {
@@ -40,11 +42,8 @@ Function.prototype.myBind = function (context) {
   }
   let that = this
   let args = [...arguments].slice(1)
-  // let arr = [...arguments].slice()
-  // console.log(arr)
   return function () {
-    console.log([...arguments])
-    return that.myApply(context, args.concat(arr))
+    return that.myApply(context, args.concat([...arguments]))
   }
 }
 person.myBind(obj, 1, 2, 3, 4)(5)

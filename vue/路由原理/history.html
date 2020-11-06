@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>history实现原理</h1>
+    <button id="myBtn">改变url</button>
+    <script>
+      const myBtn = document.getElementById('myBtn')
+      window.addEventListener('DOMContentLoaded', () => {
+        console.log('path', location.pathname)
+      })
+      myBtn.addEventListener('click', () => {
+        const state = { name: 'user' } // 可用可不用
+        history.pushState(state, '', 'user') // 切换路由
+        console.log('切换路由到了user')
+      })
+      // 监听浏览器前进后退按钮
+      window.onpopstate = (e) => {
+        console.log('onpopstate', e.state, location.pathname)
+      }
+    </script>
+    <!-- 同时后端要配合做一些设置，官网有介绍nginx try_files $uri $uri/ /index.html -->
+  </body>
+</html>

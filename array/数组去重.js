@@ -3,6 +3,7 @@ var t = [90, 8, 34, 8, 2, 39, 90, 87, 34, 22, 10]
 // set
 var d = Array.from(new Set(t))
 // console.log(d)
+
 // indexOf
 let arr = []
 for (var i = 0; i < t.length; i++) {
@@ -10,17 +11,23 @@ for (var i = 0; i < t.length; i++) {
     arr.push(t[i])
   }
 }
+// 简化写法:
+arr.forEach((v) => newArr.indexOf(v) === -1 && newArr.push(v))
 // console.log(arr)
+
 // 利用对象属性
 var obj = {}
 var newArr = []
-for (let i = 0; i < t.length; i++) {
-  if (!obj[t[i]]) {
-    obj[t[i]] = t[i] // 这个赋值随便写就行
-    newArr.push(t[i])
-  }
-}
-// console.log(newArr)
+// for (let i = 0; i < t.length; i++) {
+//   if (!obj[t[i]]) {
+//     obj[t[i]] = t[i] // 这个赋值随便写就行
+//     newArr.push(t[i])
+//   }
+// }
+// 简化写法：
+arr.forEach((v) => obj[v] || ((obj[v] = v), newArr.push(v)))
+console.log(newArr)
+
 // Array.prototype.includes
 var newArr2 = []
 for (let i = 0; i < t.length; i++) {
@@ -28,4 +35,6 @@ for (let i = 0; i < t.length; i++) {
     newArr2.push(t[i])
   }
 }
+// 简化写法：
+arr.forEach((v) => newArr.includes(v) || newArr.push(v))
 // console.log(newArr2)

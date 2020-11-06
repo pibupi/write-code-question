@@ -8,36 +8,27 @@
   <body>
     <ul></ul>
     <script>
-      // 渲染大数据时，合理使用createDocumentFragment和requestAnimationFrame，
-      // 将操作切分为一小段一小段执行。
       setTimeout(() => {
-        // 插入十万条数据
-        const total = 100000
-        // 一次插入的数据
+        const total = 1000
         const once = 20
-        // 插入数据需要的次数
         const loopCount = Math.ceil(total / once)
-        let countOfRender = 0
         const ul = document.querySelector('ul')
-        // 添加数据的方法
+        let renderCount = 0
         function add() {
           const fragment = document.createDocumentFragment()
           for (let i = 0; i < once; i++) {
             const li = document.createElement('li')
-            li.innerText = Math.floor(Math.random() * total)
+            li.innerHTML = Math.random()
             fragment.appendChild(li)
           }
           ul.appendChild(fragment)
-          countOfRender += 1
-          loop()
-        }
-        function loop() {
-          if (countOfRender < loopCount) {
+          renderCount++
+          if (renderCount < loopCount) {
             window.requestAnimationFrame(add)
           }
         }
-        loop()
-      }, 0)
+        add()
+      })
     </script>
   </body>
 </html>
