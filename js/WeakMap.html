@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // WeakMap结构与Map结构类似，也是用于生成健值对的集合，区别如下：
+      // 1.WeakMap只接收对象作为建(null除外,数组也是对象),不接收其他类型的值作为键名
+      // 2.不可遍历
+
+      // 创建WeakMap()
+      const wm = new WeakMap()
+      const key = { foo: 1 }
+      wm.set(key, 2)
+      console.log(wm.get(key)) //2
+      // 也可以接收一个数组
+      const k1 = [1, 2, 3]
+      const k2 = [4, 5, 6]
+      const vm2 = new WeakMap([
+        [k1, 'foo'],
+        [k2, 'bar'],
+      ])
+      console.log(vm2.get(k2)) // bar
+      // 数组作为key
+      let arr = [1, 2]
+      const vm3 = new WeakMap()
+      vm3.set(arr, 'arr')
+      console.log(vm3.get(arr))
+
+      // 对象作为key
+      let obj = {}
+      const vm4 = new WeakMap()
+      vm4.set(obj, 'obj')
+      console.log(vm4.get(obj))
+    </script>
+  </body>
+</html>

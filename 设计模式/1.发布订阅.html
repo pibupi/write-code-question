@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      ;(function (window) {
+        class Subscribe {
+          constructor() {
+            // 创建一个容器
+            // 每一个实例都有一个自己独立的容器，管理自己需要执行的方法即可
+            this.pond = []
+          }
+          //向池子中增加方法：去重
+          //fn就是我们需要增加的方法
+          add(fn) {
+            //需要做去重处理
+            let { pond } = this
+            let isExist = false //假设这个方法不存在
+            pond.forEach((item) => (item === fn ? (isExist = true) : null))
+            !isExist ? pond.push(fn) : null
+          }
+          //从池子中移除方法
+          remove(fn) {
+            let { pond } = this
+            pond.forEach((item, index) => {
+              if (item === fn) {
+                // pond.splice(index,1);//不能基于splice删除，因为这种删除方式会改变原有的数组，
+                //数组塌陷，所有数组后面的项都向前提取两位，数组索引出现了变化，已经找不到匹配项了
+                //解决办法：让当前项赋值为null即可（这样函数移除掉了，但是此时的数组解构没有改变，不会出现数组塌陷的问题）
+                pond[index] = null //注意：item=null是不行的
+              }
+            })
+          }
+          //通知事件池中的方法执行:如果传递参数了，把这些参数依次赋值给执行的每一个方法
+          fire(...arg) {
+            // rest参数（剩余参数）获取所有传递的参数
+            let { pond } = this
+            //remove机制处理了，此时item不一定都是函数了，还有肯能是Null
+            //null的话不执行，而且最好是把这一项删除掉，所以forEach就不行了
+            // pond.forEach((item,index)=>{
+            // item(...arg);//把参数中的数据展开，依次传给每一个方法并执行
+            // })
+            for (let i = 0; i < pond.length; i++) {
+              let item = pond[i]
+              if (item === null) {
+                pond.splice(i, 1)
+                i--
+                continue
+              }
+              item(...arg)
+            }
+          }
+        }
+        window.Subscribe = Subscribe
+      })(window)
+
+      let subscribe = new Subscribe()
+      let fn1 = function fn1(x, y) {
+        console.log(1, x, y)
+      }
+      let fn2 = function fn2() {
+        console.log(2)
+      }
+      let fn3 = function fn3() {
+        console.log(3)
+        subscribe.remove(fn1) //发布订阅数组塌陷的问题
+        subscribe.remove(fn2)
+      }
+      let fn4 = function fn4() {
+        console.log(4)
+      }
+
+      subscribe.add(fn1)
+      subscribe.add(fn1)
+      subscribe.add(fn1)
+      subscribe.add(fn2)
+      subscribe.add(fn3)
+      subscribe.add(fn4)
+
+      setTimeout(() => {
+        subscribe.fire(100, 200)
+      }, 1000)
+    </script>
+  </body>
+</html>

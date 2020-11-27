@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .sj {
+        width: 50px;
+        height: 50px;
+        border: 1px solid red;
+        position: absolute;
+        left: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sj" id="sj"></div>
+    <script>
+      //ele为要移动的盒子，target为目标位置（像素），spd为计数器的频率
+      var ele = document.getElementById('sj')
+      function animate(ele, spd) {
+        var start = Date.now() // remember start time
+        var timer = setInterval(function () {
+          var timePassed = Date.now() - start
+          var step = Math.ceil(Math.abs(timePassed - 5000) / 10)
+          console.log(step)
+          if (timePassed >= 5000) {
+            clearInterval(timer) // finish the animation after 2 seconds
+            return
+          }
+          ele.style.left = ele.offsetLeft + step + 'px'
+        }, spd)
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let sym = Symbol('sym')
+      //  普通对象
+      let obj = {
+        1: '1',
+        2: 2,
+        1: 5,
+        [sym]: '我是symbol为sym对应的value',
+      }
+      // 普通对象的话，数字的键也会被转换成字符串，所以上面的数字1会被转换为'1',
+      // 同时下面的'1'这个键，会把上面的给覆盖掉，因为都会转换为字符串，键在对象中是唯一的
+      // 所以总结如下：
+      //   1.普通对象的键都是字符串，不是字符串会转换为字符串，并且会去重
+      //   2.普通对象的键除了字符串外，就只能用symbol来做为键，只有这两种方式！
+      console.log(obj)
+
+      // Map
+      // 特点：类似与对象，是健值对的集合，是可遍历的
+      // 区别如下：键可以是任意类型的，功能更加强大
+      // 有以下所有方法：
+      //set(key,value)
+      // get(key)
+      // has(key)
+      // delete(key)
+      //clear()
+      // keys()
+      // values()
+      // entries()
+      // forEach()
+      // size
+      // 创建Map的方式：
+      // 二维数组的方式，key value以逗号分割
+      let m = new Map([
+        ['name', '安妮'],
+        [1000, 'hello'],
+        [{ tag: 10 }, true],
+        [[10, 2, 3, 4], { name: 'obj' }],
+      ])
+      console.log(m)
+      console.log(typeof m)
+      console.log(m.size)
+      // 第二种方式创建map
+      let m2 = new Map()
+      m2.set('1', '123')
+      m2.set(1001, 'world')
+      console.log(m2.get('1'))
+      console.log(m2.get(1001))
+    </script>
+  </body>
+</html>

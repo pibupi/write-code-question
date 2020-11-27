@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <input type="text" v-model="msg" />
+      <input type="text" v-model="name" />
+      {{msg}} {{name}}
+      <div>小样儿</div>
+      <div>{{name}}</div>
+      <div>
+        <div>
+          <div><div>{{name}}</div></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      let obj = { msg: new ViewModel('欢迎你'), name: new ViewModel('哈哈') }
+      function ViewModel(data) {
+        this.data = data //this.data 代表的是当前的值
+        this.nodes = [] //放节点的盒子
+      }
+      ViewModel.prototype.bindNode = function (node) {
+        //这里要做的事就是将节点和数据绑在一起
+        this.nodes.push(node)
+        console.log(this.nodes)
+      }
+      ViewModel.prototype.setVal = function (newVal) {
+        if (newVal !== this.data) {
+          //如果设置的值和老值相同
+          this.data = newVal
+          this.update()
+        }
+      }
+      ViewModel.prototype.getVal = function () {
+        return this.data
+      }
+      ViewModel.prototype.update = function () {
+        //更新方法，可以将节点依次渲染成想要的结果
+        this.nodes.forEach((node) => {
+          if (node.nodeType === 1) {
+            node.value = this.data
+          } else {
+            node.textContent = node.my.replace(/\{\{([^}]*)\}\}/g, function () {
+              return obj[arguments[1]].data
+            })
+          }
+        })
+      }
+      //将数据和节点挂载在一起
+      function compile(el) {
+        let ele = document.querySelector(el)
+        //不要直接操作节点，可能会导致页面的回流
+        let fragment = document.createDocumentFragment() //文档碎片
+        //取ele下的第一个元素 直到取完为止并且将内容方到文档碎片中
+        let child
+        while ((child = ele.firstChild)) {
+          fragment.appendChild(child)
+        } //此时把元素都放到了内容的文档碎片中，页面上就空了
+        function replace(fragment) {
+          //用来递归判断是否有我们想要的标签
+          //fragment 数据nodelist集合，类数组,需要转换成数组才能遍历
+          Array.from(fragment.childNodes).forEach((node) => {
+            //判断node 节点是标签还是文本
+            if (node.nodeType === 1) {
+              //元素节点
+              //获取节点上的所有属性,也是nodelist 类数组,需要转换成数组
+              //获取到的attr的格式就是：type = "text"  v-model="msg"
+              Array.from(node.attributes).forEach((attr) => {
+                let { name, value } = attr
+                if (name.includes('v-')) {
+                  // 看属性中有没有v-  有就是Input标签
+                  obj[value].bindNode(node) //输入框
+                  node.addEventListener('input', function (e) {
+                    obj[value].setVal(e.target.value)
+                  })
+                }
+              })
+            }
+            let reg = /\{\{([^}]*)\}\}/g //判断当前有没有{{}}的元素
+            let text = node.textContent
+            if (node.nodeType === 3 && reg.test(text)) {
+              // 文本节点 {{name}} {{msg}}
+              //自定义属性 保留原有的内容
+              node.my = text
+              text.replace(reg, function () {
+                obj[arguments[1]].bindNode(node)
+              })
+            }
+            if (node.childNodes.length) {
+              replace(node) //如果有嵌套关系 继续查找
+            }
+          })
+        }
+        replace(fragment) //编译后调用update方法
+        Object.keys(obj).forEach((key) => {
+          obj[key].update()
+        })
+        //在这里干些事是不会导致页面回流的
+        ele.appendChild(fragment)
+      }
+      compile('#app')
+    </script>
+  </body>
+</html>

@@ -10,5 +10,7 @@ let arr2 = [
   { name: 'zopp', age: 10 },
   { name: 'gpp', age: 18 },
   { name: 'yjj', age: 8 },
+  { name: '222', age: 8 },
 ]
-arr2.sort(compare('age'))
+
+console.log(arr2.sort(compare('age')))
