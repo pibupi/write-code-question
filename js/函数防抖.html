@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // isStart是否开始时就触发
+      function debounce(fn, delay = 200, isStart = false) {
+        if (typeof fn !== 'function') {
+          return console.error('请传入一个函数')
+        }
+        let timer = 0
+        return function (...args) {
+          let _this = this
+          if (isStart) {
+            fn.apply(_this, args)
+            isStart = false
+          }
+          clearTimeout(timer)
+          timer = setTimeout(() => {
+            !isStart && fn.apply(_this, args) // 这样才可以拿到事件对象
+          }, delay)
+        }
+      }
+      document.addEventListener(
+        'mousemove',
+        debounce(
+          function (e) {
+            console.log('move', e, this)
+          },
+          200,
+          true
+        )
+      )
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      // isStart是否开始时就触发
+      function throttle(fn, delay = 200, isStart = false) {
+        if (typeof fn !== 'function') {
+          return console.error('请传入一个函数')
+        }
+        let timer = 0
+        return function (...args) {
+          let _this = this
+          if(timer){
+            return
+          }
+          isStart && fn.apply(_this, args)
+          timer = setTimeout(() => {
+            !isStart && fn.apply(_this, args) // 这样才可以拿到事件对象
+            timer = 0
+          }, delay)
+        }
+      }
+      document.addEventListener(
+        'mousemove',
+        throttle(
+          function (e) {
+            console.log('move', e, this)
+          },
+          2000,
+          true
+        )
+      )
+    </script>
+  </body>
+</html>
