@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function sleep(delay) {
+        for (let ts = Date.now(); Date.now() - ts <= delay; ) {}
+      }
+      const works = [
+        () => {
+          console.log("task1 start")
+          sleep(20)
+          console.log("task1 end")
+        },
+        () => {
+          console.log("task2 start")
+          sleep(20)
+          console.log("task2 end")
+        },
+        () => {
+          console.log("task3 start")
+          sleep(20)
+          console.log("task3 end")
+        },
+      ]
+      requestIdleCallback(workLoop)
+      function workLoop(deadline) {
+        console.log(`本帧的剩余时间是${parseInt(deadline.timeRemaining())}`)
+        while (deadline.timeRemaining() > 1 && works.length > 0) {
+          performUnitOfWork()
+        }
+        // 归还时间片
+        // 如果本帧没有剩余时间了，或者任务已经全干完了
+        if (works.length > 0) {
+          console.log("sss")
+          // 如果还有工作要干，说明任务还没干完，需要再次申请时间片
+          requestIdleCallback(workLoop)
+        }
+      }
+      function performUnitOfWork() {
+        let work = works.shift() // 去除数组的第一个元素
+        work()
+      }
+    </script>
+  </body>
+</html>
